@@ -33,6 +33,13 @@ It receives incoming HTTP traffic and forwards it to one of the predefined proxy
 bash <(curl -Ls https://raw.githubusercontent.com/freecyberhawk/hawk-proxy/main/install.sh)
 ````
 
+
+#### Install Manually Docker (Optionally)
+- just if quick method stopped on docker installation!!!
+```bash
+bash <(curl -Ls https://get.docker.com)
+```
+
 ## 🔧 2 - Host Config
 
 1. Create a file named `index.php` on your shared hosting or source domain.
@@ -202,3 +209,5 @@ http_response_code($code);
 header("Content-Type: $contentType");
 echo $response;
 ```
+
+
