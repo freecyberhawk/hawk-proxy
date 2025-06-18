@@ -57,6 +57,7 @@ if ((isset($_SERVER['HTTP_USER_AGENT']) and empty($_SERVER['HTTP_USER_AGENT'])) 
 $isTextHTML = str_contains(($_SERVER['HTTP_ACCEPT'] ?? ''), 'text/html');
 
 
+// Change as need
 $proxies = [
     'http://123.123.123.123:8080/proxy?url=',
     'http://124.124.124.124:8080/proxy?url=',
