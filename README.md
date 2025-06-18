@@ -40,6 +40,9 @@ bash <(curl -Ls https://raw.githubusercontent.com/freecyberhawk/hawk-proxy/main/
 bash <(curl -Ls https://get.docker.com)
 ```
 
+![Hawk proxy](inc/secret_key.png)
+
+
 ## 🔧 2 - Host Config
 
 1.Create a file named `.htaccess` on your shared hosting or source domain.
@@ -97,7 +100,7 @@ foreach ($proxies as $proxyBase) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $proxyBase . $encodedURL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -122,7 +125,13 @@ header("Content-Type: $contentType");
 echo $response;
 ```
 
-## Done
+## Commands
+
+- `hawk-proxy` up
+- `hawk-proxy` logs 
+- `hawk-proxy` down  
+- `hawk-proxy` status
+
 
 ---
 
