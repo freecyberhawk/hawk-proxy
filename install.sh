@@ -65,8 +65,8 @@ install_cli() {
 cd /opt/hawk-proxy
 
 case "$1" in
-  up)
-    docker compose up --build
+    up)
+      docker compose up --build -d
     ;;
   down)
     docker compose down
@@ -87,9 +87,9 @@ EOF
 }
 
 start_service() {
-    echo "🔄 Starting hawk-proxy..."
-    docker compose up --build
-    echo "✅ hawk-proxy is running. Press Ctrl+C to detach."
+    echo "🔄 Starting hawk-proxy in background (detached)..."
+    docker compose up --build -d
+    echo "✅ hawk-proxy is running in background."
 }
 
 install_docker
