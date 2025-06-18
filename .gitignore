@@ -1,0 +1,35 @@
+# Go build output
+proxy_server
+*.out
+*.exe
+
+# Go cache and packages
+/pkg/
+/bin/
+/vendor/
+
+# Go test binary
+*.test
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+
+# Docker files
+*.env
+.env.*
+docker-compose.override.yml
+
+# Dependency directories (if used)
+node_modules/
+
+# Git files
+*.orig
