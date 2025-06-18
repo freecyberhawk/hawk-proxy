@@ -45,7 +45,7 @@ configure_env() {
     echo "API_SECRET=$API_SECRET" > .env
     echo "TARGET_HOST=$TARGET_HOST" >> .env
 
-    echo "🔐 Your API_SECRET: $API_SECRET"
+    echo -e "🔐 Your API_SECRET: \033[0;31m$API_SECRET\033[0m"
 }
 
 install_cli() {
