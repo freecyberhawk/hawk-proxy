@@ -44,7 +44,13 @@ configure_env() {
     echo -n "🌐 Enter target domain (e.g. subscription-domain.com): "
     read TARGET_HOST
 
-    API_SECRET=$(generate_api_key)
+    echo -n "🔑 Enter your API_SECRET (leave empty to auto-generate): "
+    read API_SECRET
+
+    if [ -z "$API_SECRET" ]; then
+        API_SECRET=$(generate_api_key)
+        echo "⚙️  No API_SECRET provided. Generated one automatically."
+    fi
 
     echo "✅ Saving config to .env"
     echo "API_SECRET=$API_SECRET" > .env
