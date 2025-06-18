@@ -68,7 +68,7 @@ const API_KEY = 'MY_SECRET_API_KEY'; // Change this same as vps config
 
 
 $targetPath = $_SERVER['SCRIPT_URL'] ?? '';
-$encodedURL = urlencode('https://forkskill.com' . $targetPath);
+$encodedURL = urlencode('https://subscription-domain.com' . $targetPath);
 
 
 $headers = [
@@ -166,7 +166,7 @@ const API_KEY = 'MY_SECRET_API_KEY'; // Change this same as vps config
 
 
 $targetPath = $_SERVER['SCRIPT_URL'] ?? '';
-$encodedURL = urlencode('https://forkskill.com' . $targetPath);
+$encodedURL = urlencode('https://subscription-domain.com' . $targetPath);
 
 
 $headers = [
