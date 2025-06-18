@@ -33,3 +33,5 @@ node_modules/
 
 # Git files
 *.orig
+
+.env
