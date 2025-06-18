@@ -1,3 +1,5 @@
+![Hawk proxy](inc/hawk-proxy.jpg)
+
 # Hawk Proxy
 
 ### 🌐 Simple traffic forwarder through PHP & proxy servers
