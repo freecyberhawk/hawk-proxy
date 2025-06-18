@@ -2,84 +2,70 @@
 
 set -e
 
-APP_NAME="hawk-proxy"
-INSTALL_DIR="/opt/$APP_NAME"
-BIN_PATH="/usr/local/bin/$APP_NAME"
-REPO_URL="https://github.com/freecyberhawk/hawk-proxy.git"
+install_docker() {
+    echo "🔧 Installing Docker (if needed)..."
+    sudo apt-get update
+    sudo apt-get install -y \
+        ca-certificates \
+        curl \
+        gnupg
 
-echo "🔍 Checking for Docker..."
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
-if ! command -v docker &> /dev/null; then
-  echo "🐳 Docker not found. Installing Docker..."
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-  sudo apt-get update
-  sudo apt-get install -y \
-    ca-certificates \
-    curl \
-    gnupg
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+}
 
-  sudo install -m 0755 -d /etc/apt/keyrings
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-  sudo chmod a+r /etc/apt/keyrings/docker.gpg
+generate_api_key() {
+    openssl rand -hex 16
+}
 
-  echo \
-    "deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-    \"$(. /etc/os-release && echo "$VERSION_CODENAME")\" stable" | \
-    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+setup_project() {
+    echo "📁 Setting up hawk-proxy in /opt/hawk-proxy ..."
+    sudo rm -rf /opt/hawk-proxy
+    sudo mkdir -p /opt/hawk-proxy
+    sudo git clone https://github.com/freecyberhawk/hawk-proxy.git /opt/hawk-proxy
+    cd /opt/hawk-proxy
+}
 
-  sudo apt-get update
+configure_env() {
+    echo -n "🌐 Enter target domain (e.g. forkskill.com): "
+    read TARGET_HOST
 
-  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    API_SECRET=$(generate_api_key)
 
-  echo "✅ Docker installed."
-else
-  echo "✅ Docker already installed."
-fi
+    echo "✅ Saving config to .env"
+    echo "API_SECRET=$API_SECRET" > .env
+    echo "TARGET_HOST=$TARGET_HOST" >> .env
 
-echo "📦 Installing $APP_NAME..."
+    echo "🔐 Your API_SECRET: $API_SECRET"
+}
 
-if [ ! -d "$INSTALL_DIR" ]; then
-  sudo git clone "$REPO_URL" "$INSTALL_DIR"
-else
-  echo "🔁 Updating existing installation..."
-  cd "$INSTALL_DIR"
-  sudo git pull
-fi
-
-cat <<EOF | sudo tee "$BIN_PATH" > /dev/null
+install_cli() {
+    echo "🚀 Creating CLI command: hawk-proxy"
+    sudo tee /usr/local/bin/hawk-proxy > /dev/null <<EOF
 #!/bin/bash
-cd $INSTALL_DIR
-
-case "\$1" in
-  up)
-    docker compose up -d
-    ;;
-  down)
-    docker compose down
-    ;;
-  status)
-    docker compose ps
-    ;;
-  logs)
-    docker compose logs -f
-    ;;
-  *)
-    echo "Usage: $APP_NAME {up|down|status|logs}"
-    exit 1
-    ;;
-esac
+cd /opt/hawk-proxy
+docker compose "\$@"
 EOF
+    sudo chmod +x /usr/local/bin/hawk-proxy
+}
 
-sudo chmod +x "$BIN_PATH"
-echo "✅ Installed CLI as '$APP_NAME' in /usr/local/bin"
+start_service() {
+    echo "🔄 Starting hawk-proxy..."
+    docker compose up --build
+    echo "✅ hawk-proxy is running. Press Ctrl+C to detach."
+}
 
-echo ""
-echo "🚀 Starting $APP_NAME..."
-docker compose -f "$INSTALL_DIR/docker-compose.yml" up -d
-
-echo ""
-echo "📺 Showing logs now. Press Ctrl+C to exit."
-echo "👉 From now on, use '$APP_NAME up|down|status|logs' to control the proxy."
-
-sleep 1
-docker compose -f "$INSTALL_DIR/docker-compose.yml" logs -f
+install_docker
+setup_project
+configure_env
+install_cli
+start_service
