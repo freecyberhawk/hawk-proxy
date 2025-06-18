@@ -103,6 +103,10 @@ header("Content-Type: $contentType");
 echo $response;
 ```
 
+## Done
+
+---
+
 ### 🚫 Uninstall
 
 To completely remove hawk-proxy from your server:
