@@ -80,7 +80,7 @@ const API_KEY = 'MY_SECRET_API_KEY'; // Change this same as vps config
 
 
 $targetPath = $_SERVER['SCRIPT_URL'] ?? '';
-$encodedURL = urlencode('https://subscription-domain.com' . $targetPath);
+$encodedURL = urlencode('https://panel-domain.com' . $targetPath);
 
 
 $headers = [
