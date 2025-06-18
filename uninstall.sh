@@ -1,25 +1,22 @@
 #!/bin/bash
 
-set -e
-
-echo "🧹 Uninstalling hawk-proxy..."
-
-# Stop containers
-if [ -f /opt/hawk-proxy/docker-compose.yml ]; then
-  echo "📦 Stopping docker containers..."
-  docker compose -f /opt/hawk-proxy/docker-compose.yml down
+echo "⚠️  Are you sure you want to uninstall hawk-proxy? (yes/no)"
+read confirm
+if [[ "$confirm" != "yes" ]]; then
+    echo "❌ Uninstallation aborted."
+    exit 1
 fi
 
-# Remove binary
-if [ -f /usr/local/bin/hawk-proxy ]; then
-  echo "🗑️ Removing CLI from /usr/local/bin..."
-  sudo rm -f /usr/local/bin/hawk-proxy
-fi
+echo "🛑 Stopping Docker containers..."
+cd /opt/hawk-proxy 2>/dev/null && docker compose down || true
 
-# Remove project directory
-if [ -d /opt/hawk-proxy ]; then
-  echo "🗑️ Removing /opt/hawk-proxy directory..."
-  sudo rm -rf /opt/hawk-proxy
-fi
+echo "🧹 Removing project files..."
+sudo rm -rf /opt/hawk-proxy
 
-echo "✅ Uninstalled successfully."
+echo "🧼 Removing CLI command..."
+sudo rm -f /usr/local/bin/hawk-proxy
+
+echo "🗑️  Removing environment file..."
+sudo rm -f /opt/hawk-proxy/.env
+
+echo "✅ hawk-proxy has been uninstalled completely."
