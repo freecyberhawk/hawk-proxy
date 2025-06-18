@@ -41,7 +41,7 @@ setup_project() {
 }
 
 configure_env() {
-    echo -n "🌐 Enter target domain (e.g. subscription-domain.com): "
+    echo -n "🌐 Enter target domain (e.g. panel.com): "
     read TARGET_HOST
 
     echo -n "🔑 Enter your API_SECRET (leave empty to auto-generate): "
