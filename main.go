@@ -1,18 +1,53 @@
 package main
 
 import (
+	"bufio"
+	"crypto/rand"
+	"encoding/hex"
+	"fmt"
+	"github.com/joho/godotenv"
 	"io"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
-const apiKey = "MY_SECRET_API_KEY" // 🔐 MY_SECRET_API_KEY
+var apiKey string
+var targetHost string
+
+func init() {
+	_ = godotenv.Load()
+
+	apiKey = os.Getenv("API_SECRET")
+	targetHost = os.Getenv("TARGET_HOST")
+
+	created := false
+
+	if apiKey == "" {
+		apiKey = generateSecret()
+		created = true
+	}
+
+	if targetHost == "" {
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Print("🔧 Enter target domain (e.g. forkskill.com): ")
+		input, _ := reader.ReadString('\n')
+		targetHost = strings.TrimSpace(input)
+		created = true
+	}
+
+	if created {
+		saveEnv(apiKey, targetHost)
+		fmt.Println("✅ Configuration saved to .env")
+		fmt.Println("🔐 Your API_SECRET:", apiKey)
+	}
+}
 
 func main() {
 	http.HandleFunc("/proxy", handleProxy)
-	log.Println("Proxy server running on :8080")
+	log.Println("🚀 Proxy server running on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
@@ -30,8 +65,8 @@ func handleProxy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	parsedURL, err := url.Parse(rawURL)
-	if err != nil || !strings.Contains(parsedURL.Host, "forkskill.com") {
-		http.Error(w, "Forbidden: Only forkskill.com is allowed", http.StatusForbidden)
+	if err != nil || !strings.Contains(parsedURL.Host, targetHost) {
+		http.Error(w, "Forbidden: Only "+targetHost+" is allowed", http.StatusForbidden)
 		return
 	}
 
@@ -56,4 +91,15 @@ func handleProxy(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(resp.StatusCode)
 	io.Copy(w, resp.Body)
+}
+
+func generateSecret() string {
+	bytes := make([]byte, 16)
+	_, _ = rand.Read(bytes)
+	return hex.EncodeToString(bytes)
+}
+
+func saveEnv(secret, host string) {
+	content := fmt.Sprintf("API_SECRET=%s\nTARGET_HOST=%s\n", secret, host)
+	os.WriteFile(".env", []byte(content), 0644)
 }
