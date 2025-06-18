@@ -36,7 +36,7 @@ setup_project() {
 }
 
 configure_env() {
-    echo -n "🌐 Enter target domain (e.g. forkskill.com): "
+    echo -n "🌐 Enter target domain (e.g. subscription-domain.com): "
     read TARGET_HOST
 
     API_SECRET=$(generate_api_key)
