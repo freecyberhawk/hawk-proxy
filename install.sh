@@ -3,6 +3,11 @@
 set -e
 
 install_docker() {
+    if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
+        echo "✅ Docker and Docker Compose already installed. Skipping installation."
+        return
+    fi
+
     echo "🔧 Installing Docker (if needed)..."
     sudo apt-get update
     sudo apt-get install -y \
