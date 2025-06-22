@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
@@ -22,32 +21,11 @@ func init() {
 
 	apiKey = os.Getenv("API_SECRET")
 	targetHost = os.Getenv("TARGET_HOST")
-
-	created := false
-
-	if apiKey == "" {
-		apiKey = generateSecret()
-		created = true
-	}
-
-	if targetHost == "" {
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Print("🔧 Enter target domain (e.g. forkskill.com): ")
-		input, _ := reader.ReadString('\n')
-		targetHost = strings.TrimSpace(input)
-		created = true
-	}
-
-	if created {
-		saveEnv(apiKey, targetHost)
-		fmt.Println("✅ Configuration saved to .env")
-		fmt.Println("🔐 Your API_SECRET:", apiKey)
-	}
 }
 
 func main() {
 	http.HandleFunc("/proxy", handleProxy)
-	log.Println("🚀 Proxy server running on :8080")
+	log.Println("✅ Proxy server running on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
