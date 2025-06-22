@@ -97,7 +97,7 @@ EOF
 
 start_service() {
     docker compose up --build -d
-    echo "✅ Hawk-proxy is running in background."
+    echo "✅ Hawk Proxy is running in background."
 }
 
 install_docker
