@@ -23,7 +23,7 @@ If you found this project helpful, please give it a ⭐️ on [GitHub](https://g
 
 ## 🇬🇧 English
 
-**hawk_proxy** is a lightweight PHP-based traffic redirection system.
+**Hawk Proxy** is a lightweight PHP-based traffic redirection system.
 
 It receives incoming HTTP traffic and forwards it to one of the predefined proxy servers (typically hosted on virtual private servers). If the first proxy fails, it automatically tries the next one.
 
@@ -68,25 +68,33 @@ if ((isset($_SERVER['HTTP_USER_AGENT']) and empty($_SERVER['HTTP_USER_AGENT'])) 
 
 $isTextHTML = str_contains(($_SERVER['HTTP_ACCEPT'] ?? ''), 'text/html');
 
+// Tunnel port, set this to the port your tunnel uses on the host
+$tunnelPort = 10000;  // e.g., tunnel port on the Iran host
 
-// Change as need
-$proxies = [
-    'http://123.123.123.123:8080/proxy?url=',
-    'http://124.124.124.124:8080/proxy?url=',
+// Proxy IPs without port
+$proxyIPs = [
+    '123.123.123.123',
+    '124.124.124.124',
 ];
 
+// Build proxy URLs by inserting the tunnel port dynamically
+$proxies = [];
+foreach ($proxyIPs as $ip) {
+    $proxies[] = "http://{$ip}:{$tunnelPort}/proxy?url=";
+}
 
-const API_KEY = 'MY_SECRET_API_KEY'; // Change this same as vps config
-
+const API_KEY = 'MY_SECRET_API_KEY'; // Must match the VPS config API key
 
 $targetPath = $_SERVER['SCRIPT_URL'] ?? '';
 $encodedURL = urlencode('https://panel-domain.com' . $targetPath);
 
-
+// Prepare headers for the proxy request
 $headers = [
     'X-API-Key: ' . API_KEY,
     'User-Agent: ' . $_SERVER['HTTP_USER_AGENT']
 ];
+
+// Add Accept header if the client accepts HTML
 if ($isTextHTML) {
     $headers[] = 'Accept: text/html';
 }
@@ -95,7 +103,7 @@ $response = null;
 $code = 0;
 $contentType = 'text/plain';
 
-
+// Try each proxy server until a successful response is received
 foreach ($proxies as $proxyBase) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $proxyBase . $encodedURL);
@@ -114,12 +122,13 @@ foreach ($proxies as $proxyBase) {
     }
 }
 
-
+// If no proxy succeeded, return error
 if ($response === false || $code !== 200) {
     http_response_code(502);
     exit("Both proxy servers failed. Try again later.");
 }
 
+// Send back the successful response to the client
 http_response_code($code);
 header("Content-Type: $contentType");
 echo $response;

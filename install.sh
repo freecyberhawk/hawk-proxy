@@ -8,7 +8,7 @@ install_docker() {
         return
     fi
 
-    echo "🔧 Installing Docker (if needed)..."
+    echo "Installing Docker (if needed)..."
     sudo apt-get update
     sudo apt-get install -y \
         ca-certificates \
@@ -26,6 +26,7 @@ install_docker() {
 
     sudo apt-get update
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    echo "✅ Installing Docker (if needed)..."
 }
 
 generate_api_key() {
@@ -33,34 +34,41 @@ generate_api_key() {
 }
 
 setup_project() {
-    echo "📁 Setting up hawk-proxy in /opt/hawk-proxy ..."
+    echo "Setting up hawk-proxy"
     sudo rm -rf /opt/hawk-proxy
     sudo mkdir -p /opt/hawk-proxy
     sudo git clone https://github.com/freecyberhawk/hawk-proxy.git /opt/hawk-proxy
     cd /opt/hawk-proxy
+    echo "✅ Hawk-proxy successfully set up at /opt/hawk-proxy"
 }
 
 configure_env() {
-    echo -n "🌐 Enter target domain (e.g. panel.com): "
+    echo -n "Enter target domain (e.g. panel.com): "
     read TARGET_HOST
 
-    echo -n "🔑 Enter your API_SECRET (leave empty to auto-generate): "
+    echo -n "Enter tunnel port (e.g. 9000): "
+    read TUNNEL_PORT
+
+    echo -n "Enter your API_SECRET (leave empty to auto-generate): "
     read API_SECRET
 
     if [ -z "$API_SECRET" ]; then
         API_SECRET=$(generate_api_key)
-        echo "⚙️  No API_SECRET provided. Generated one automatically."
+        echo "No API_SECRET provided. Generated one automatically."
     fi
 
-    echo "✅ Saving config to .env"
+    echo "Saving config to .env"
     echo "API_SECRET=$API_SECRET" > .env
     echo "TARGET_HOST=$TARGET_HOST" >> .env
 
     echo -e "🔐 Your API_SECRET: \033[0;31m$API_SECRET\033[0m"
+
+    echo "✅ Config saved to .env"
+
 }
 
 install_cli() {
-    echo "🚀 Creating CLI command: hawk-proxy"
+    echo "Creating CLI command: hawk-proxy"
     sudo tee /usr/local/bin/hawk-proxy > /dev/null <<EOF
 cd /opt/hawk-proxy
 
@@ -84,12 +92,12 @@ case "$1" in
 esac
 EOF
     sudo chmod +x /usr/local/bin/hawk-proxy
+    echo "✅ CLI commands created"
 }
 
 start_service() {
-    echo "🔄 Starting hawk-proxy in background (detached)..."
     docker compose up --build -d
-    echo "✅ hawk-proxy is running in background."
+    echo "✅ Hawk-proxy is running in background."
 }
 
 install_docker
