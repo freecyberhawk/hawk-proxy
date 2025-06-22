@@ -69,7 +69,7 @@ if ((isset($_SERVER['HTTP_USER_AGENT']) and empty($_SERVER['HTTP_USER_AGENT'])) 
 $isTextHTML = str_contains(($_SERVER['HTTP_ACCEPT'] ?? ''), 'text/html');
 
 // Tunnel port, set this to the port your tunnel uses on the host
-$tunnelPort = 10000;  // e.g., tunnel port on the Iran host
+$tunnelPort = 8080;
 
 // Proxy IPs without port
 $proxyIPs = [
