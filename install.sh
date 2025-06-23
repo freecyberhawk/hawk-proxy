@@ -80,12 +80,13 @@ configure_env() {
 
 install_cli() {
     echo "Creating CLI command: hawk-proxy"
-    sudo tee /usr/local/bin/hawk-proxy > /dev/null <<EOF
+    sudo tee /usr/local/bin/hawk-proxy > /dev/null <<'EOF'
+#!/bin/bash
 cd /opt/hawk-proxy
 
 case "$1" in
-    up)
-      docker compose up --build -d
+  up)
+    docker compose up --build -d
     ;;
   down)
     docker compose down
@@ -97,14 +98,19 @@ case "$1" in
       echo "stopped"
     fi
     ;;
+  logs)
+    docker compose logs -f
+    ;;
   *)
-    echo "Usage: hawk-proxy {up|down|status}"
+    echo "Usage: hawk-proxy {up|down|status|logs}"
     ;;
 esac
 EOF
+
     sudo chmod +x /usr/local/bin/hawk-proxy
     echo "✅ CLI commands created"
 }
+
 
 start_service() {
     docker compose up --build -d
