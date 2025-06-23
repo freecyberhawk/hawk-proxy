@@ -60,6 +60,11 @@ configure_env() {
     echo -n "Enter tunnel port (e.g. 8080): "
     read TUNNEL_PORT
 
+    if [ -z "$TUNNEL_PORT" ]; then
+        TUNNEL_PORT=8080
+        echo -e "TUNNEL_PORT was not provided. Set to default: \033[0;31m8080\033[0m"
+    fi
+
     echo -n "Enter your API_SECRET (leave empty to auto-generate): "
     read API_SECRET
 
@@ -71,6 +76,7 @@ configure_env() {
     echo "Saving config to .env"
     echo "API_SECRET=$API_SECRET" > .env
     echo "TARGET_HOST=$TARGET_HOST" >> .env
+    echo "TUNNEL_PORT=$TUNNEL_PORT" >> .env
 
     echo -e "🔐 Your API_SECRET: \033[0;31m$API_SECRET\033[0m"
 
@@ -91,18 +97,11 @@ case "$1" in
   down)
     docker compose down
     ;;
-  status)
-    if docker compose ps | grep -q "Up"; then
-      echo "running"
-    else
-      echo "stopped"
-    fi
-    ;;
   logs)
     docker compose logs -f
     ;;
   *)
-    echo "Usage: hawk-proxy {up|down|status|logs}"
+    echo "Usage: hawk-proxy {up | down | logs}"
     ;;
 esac
 EOF
