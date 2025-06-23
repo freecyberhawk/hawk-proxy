@@ -150,5 +150,5 @@ To completely remove hawk-proxy from your server:
 
 ```bash
 bash <(curl -Ls https://raw.githubusercontent.com/freecyberhawk/hawk-proxy/main/uninstall.sh)
-
+```
 ---
