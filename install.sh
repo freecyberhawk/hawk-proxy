@@ -43,10 +43,10 @@ setup_project() {
 }
 
 configure_env() {
-    echo -n "Enter target domain (e.g. panel.com): "
+    echo -n "Enter target domain (e.g. panelDomain.com): "
     read TARGET_HOST
 
-    echo -n "Enter tunnel port (e.g. 9000): "
+    echo -n "Enter tunnel port (e.g. 8080): "
     read TUNNEL_PORT
 
     echo -n "Enter your API_SECRET (leave empty to auto-generate): "

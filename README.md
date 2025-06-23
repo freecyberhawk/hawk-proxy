@@ -86,7 +86,7 @@ foreach ($proxyIPs as $ip) {
 const API_KEY = 'MY_SECRET_API_KEY'; // Must match the VPS config API key
 
 $targetPath = $_SERVER['SCRIPT_URL'] ?? '';
-$encodedURL = urlencode('https://panel-domain.com' . $targetPath);
+$encodedURL = urlencode('https://panelDomain.com' . $targetPath);
 
 // Prepare headers for the proxy request
 $headers = [
