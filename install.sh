@@ -54,8 +54,18 @@ setup_project() {
 }
 
 configure_env() {
-    echo -n "Enter target domain (e.g. panelDomain.com): "
-    read TARGET_HOST
+    while true; do
+        echo -n "Enter target domain (e.g. panelDomain.com): "
+        read TARGET_HOST
+
+        if [[ -z "$TARGET_HOST" ]]; then
+            echo "❌ Domain cannot be empty. Please try again."
+        elif [[ "$TARGET_HOST" =~ ^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$ ]]; then
+            break
+        else
+            echo "❌ Invalid domain format. Please enter a valid domain (e.g. panelDomain.com)"
+        fi
+    done
 
     echo -n "Enter tunnel port (e.g. 8080): "
     read TUNNEL_PORT
