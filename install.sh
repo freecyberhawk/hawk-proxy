@@ -1,5 +1,16 @@
 #!/bin/bash
 
+echo -e "\033[1;36m"
+cat << "EOF"
+  _  _             _     ___
+ | || |__ ___ __ _| |__ | _ \_ _ _____ ___  _
+ | __ / _` \ V  V / / / |  _/ '_/ _ \ \ / || |
+ |_||_\__,_|\_/\_/|_\_\ |_| |_| \___/_\_\\_, |
+                                         |__/
+EOF
+echo -e "          github.com/\033[4mfreecyberhawk\033[0m"
+echo -e "\033[0m"
+# --- End: Hawk Proxy Banner ---
 set -e
 
 install_docker() {
