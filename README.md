@@ -40,8 +40,6 @@ bash <(curl -Ls https://raw.githubusercontent.com/freecyberhawk/hawk-proxy/main/
 bash <(curl -Ls https://get.docker.com)
 ```
 
-![Hawk proxy](inc/secret_key.png)
-
 
 ## 🔧 2 - Host Config
 
