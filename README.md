@@ -136,9 +136,7 @@ echo $response;
 
 - `hawk-proxy` up
 - `hawk-proxy` logs 
-- `hawk-proxy` down  
-- `hawk-proxy` status
-
+- `hawk-proxy` down
 
 ---
 
