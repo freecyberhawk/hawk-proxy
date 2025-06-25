@@ -21,6 +21,9 @@
 
 If you found this project helpful, please give it a ⭐️ on [GitHub](https://github.com/freecyberhawk/hawk-proxy)!
 
+## 🎓 Tutorial
+Youtube: [آموزش استفاده از Hawk Proxy جهت فعال سازی لینک اشتراک در پنل های Marzban, XUI, Sanaeiاز طریق تانل](https://www.youtube.com/watch?v=dkmnuFv4_vE)
+
 ## 🇬🇧 English
 
 **Hawk Proxy** is a lightweight PHP-based traffic redirection system.
