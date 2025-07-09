@@ -1,4 +1,4 @@
-![Hawk proxy](inc/hawk-proxy.jpg)
+![Hawk proxy](inc/hawk_proxy.png)
 
 # Hawk Proxy V1.1.0
 
@@ -24,7 +24,7 @@ If you found this project helpful, please give it a ⭐️ on [GitHub](https://g
 ## 🎓 Tutorial
 Youtube: [آموزش استفاده از Hawk Proxy جهت فعال سازی لینک اشتراک در پنل های Marzban, XUI, Sanaeiاز طریق تانل](https://www.youtube.com/watch?v=dkmnuFv4_vE)
 
-## ☕️ Buy me a coffee
+## ☕️ Buy me a Coffee
 Tether (BEP20):
 > 0xe52d86cf875b11d8b95ab750e68fd418bba763b8
 
